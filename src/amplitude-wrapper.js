@@ -61,14 +61,14 @@ e=(!e||e.length===0?"$default_instance":e).toLowerCase()
         'preInsert'
     ];
 
-    /* To work with the identify API, each identify operation as an array,
+    /* To work with the identify API, pass an array of identify operation (each an array in itself)
      * with the command and parameters included.
      *
-     * window._amplitude('<instanceName.>identify',
+     * window._amplitude('<instanceName.>identify', [
      *     ['add', 'someUserProp', 1],
      *     ['add', 'someOtherUserProp', 2],
      *     ['prepend', 'anotherUserProp', 'someValue']
-     * );
+     * ]);
      *
      */
     var identify = function(amplitudeInstance, args) {
@@ -77,8 +77,8 @@ e=(!e||e.length===0?"$default_instance":e).toLowerCase()
         // Validate identify args
         if (!Array.isArray(args) || args.length === 0) return;
 
-        // Loop through the commands and execute each
-        args.forEach(function(identifyParams) {
+        // Loop through the commands array and execute each
+        args[0].forEach(function(identifyParams) {
             var cmd = identifyParams.shift();
 
             // If not a valid "identify" command, return
@@ -133,7 +133,7 @@ e=(!e||e.length===0?"$default_instance":e).toLowerCase()
         if (cmdParts && cmdParts.length === 3) {
             instanceName = cmdParts[1];
             cmd = cmdParts[2];
-        }
+        } 
 
         // If cmd is not one of the available ones, return
         if (eventEnum.indexOf(cmd) === -1) return;
