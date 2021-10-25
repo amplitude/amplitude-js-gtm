@@ -243,20 +243,30 @@ window._amplitude(
 ## `identify`
 [Link to specification](https://amplitude.github.io/Amplitude-JavaScript/Identify)
 
-Run user property operations for the current user. Each Identify command is passed as its own array argument to `identify`, and the commands are executed in order. The array syntax is:
+Run user property operations for the current user. The 'identify' method utilizes a single parameter, which is an array of individual user property operations. Each operation is its own array, following this format:
 
 ```
-['identifyCommand', 'userProperty', 'value']
+// Wrapper array
+[
+  // First command
+  ['identifyCommand', 'userProperty', 'value'],
+  // Second command
+  ['identifyCommand', 'userProperty', 'value'],
+  // etc.
+  [...]
+]
 ```
+
+The `identify` API processes the commands in the order they are in the argument array.
 
 Supported `identifyCommand` values are: `add`, `append`, `prepend`, `set`, `setOnce`, `unset`, `preInsert`.
 
 Example:
 ```
-window._amplitude(
+window._amplitude([
     'identify',
     ['set', 'user_status', 'customer'],
     ['add', 'purchases', 1],
     ['append', 'purchased_products', 'product_123']
-);
+]);
 ```
