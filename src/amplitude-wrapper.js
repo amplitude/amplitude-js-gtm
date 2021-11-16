@@ -1,20 +1,22 @@
+import { version } from '../package.json';
+
 /* Amplitude JavaScript SDK begin */
 (function (e, t) {
   var n = e.amplitude || { _q: [], _iq: {} };
   var r = t.createElement('script');
   r.type = 'text/javascript';
-  r.integrity = 'sha384-tzcaaCH5+KXD4sGaDozev6oElQhsVfbJvdi3//c2YvbY02LrNlbpGdt3Wq4rWonS';
+  r.integrity = 'sha384-4rr7CTymHc64YjTTL6O3ktfsHYI1yJnQdmKv4zFoe+frjXb05MfzzuLLIAgJ/XHs';
   r.crossOrigin = 'anonymous';
   r.async = true;
-  r.src = 'https://cdn.amplitude.com/libs/amplitude-8.5.0-min.gz.js';
+  r.src = 'https://cdn.amplitude.com/libs/amplitude-8.11.0-min.gz.js';
   r.onload = function () {
     if (!e.amplitude.runQueuedFunctions) {
       console.log('[Amplitude] Error: could not load SDK');
     }
   };
-  var i = t.getElementsByTagName('script')[0];
-  i.parentNode.insertBefore(r, i);
-  function s(e, t) {
+  var s = t.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(r, s);
+  function i(e, t) {
     e.prototype[t] = function () {
       this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
       return this;
@@ -26,7 +28,7 @@
   };
   var a = ['add', 'append', 'clearAll', 'prepend', 'set', 'setOnce', 'unset', 'preInsert', 'postInsert', 'remove'];
   for (var c = 0; c < a.length; c++) {
-    s(o, a[c]);
+    i(o, a[c]);
   }
   n.Identify = o;
   var u = function () {
@@ -35,7 +37,7 @@
   };
   var l = ['setProductId', 'setQuantity', 'setPrice', 'setRevenueType', 'setEventProperties'];
   for (var p = 0; p < l.length; p++) {
-    s(u, l[p]);
+    i(u, l[p]);
   }
   n.Revenue = u;
   var d = [
@@ -61,6 +63,7 @@
     'logEventWithGroups',
     'setSessionId',
     'resetSessionId',
+    'setLibrary',
   ];
   function v(e) {
     function t(t) {
@@ -89,6 +92,8 @@
 (function (a, p) {
   // If window.amplitude doesn't exist, return
   if (!a.amplitude || typeof a.amplitude.getInstance !== 'function') return;
+
+  a.amplitude.getInstance().setLibrary('amplitude-js-gtm', version);
 
   // Enumerate available events
   var eventEnum = [
