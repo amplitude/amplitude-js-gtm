@@ -1,0 +1,12 @@
+{
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
+  "plugins": ["prettier", "@amplitude/eslint-plugin-amplitude"],
+  "env": { "browser": true },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020
+  },
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}
