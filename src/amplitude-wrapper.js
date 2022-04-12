@@ -5,10 +5,10 @@ import { version } from '../package.json';
   var n = e.amplitude || { _q: [], _iq: {} };
   var r = t.createElement('script');
   r.type = 'text/javascript';
-  r.integrity = 'sha384-4rr7CTymHc64YjTTL6O3ktfsHYI1yJnQdmKv4zFoe+frjXb05MfzzuLLIAgJ/XHs';
+  r.integrity = 'sha384-VuGgAcmMrGHihvjXxxBVMIqoDFXc8/PO9q/08kCgq4Wn1iPnSmUbI3xhXaFozVFv"';
   r.crossOrigin = 'anonymous';
   r.async = true;
-  r.src = 'https://cdn.amplitude.com/libs/amplitude-8.11.0-min.gz.js';
+  r.src = 'https://cdn.amplitude.com/libs/amplitude-8.18.1-min.gz.js';
   r.onload = function () {
     if (!e.amplitude.runQueuedFunctions) {
       console.log('[Amplitude] Error: could not load SDK');
