@@ -5,7 +5,7 @@ import { version } from '../package.json';
   var n = e.amplitude || { _q: [], _iq: {} };
   var r = t.createElement('script');
   r.type = 'text/javascript';
-  r.integrity = 'sha384-VuGgAcmMrGHihvjXxxBVMIqoDFXc8/PO9q/08kCgq4Wn1iPnSmUbI3xhXaFozVFv"';
+  r.integrity = 'sha384-VuGgAcmMrGHihvjXxxBVMIqoDFXc8/PO9q/08kCgq4Wn1iPnSmUbI3xhXaFozVFv';
   r.crossOrigin = 'anonymous';
   r.async = true;
   r.src = 'https://cdn.amplitude.com/libs/amplitude-8.18.1-min.gz.js';
