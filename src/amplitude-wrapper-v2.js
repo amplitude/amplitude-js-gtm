@@ -179,7 +179,7 @@
   var revenue = function(args) {
       args = args.shift();
       // Validate revenue args
-      if (!args.price || !args.id)  return;
+      if (!args.price || !args.productId)  return;
 
       var revenue = new a.amplitude.Revenue()
           .setProductId(args.productId)
