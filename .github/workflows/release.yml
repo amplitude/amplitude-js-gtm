@@ -70,6 +70,8 @@ jobs:
           CURRENT_VERSION=$(npm info . version)
           STAGED_VERSION=$(npx semver $CURRENT_VERSION -i ${{ env.RELEASE_VERSION }} --preid beta)
           npm version $STAGED_VERSION
+          git push
+          git push origin $STAGED_VERSION
 
       - name: Pubish package
         run: |
