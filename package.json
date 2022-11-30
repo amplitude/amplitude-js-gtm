@@ -9,7 +9,7 @@
     "lint:eslint": "eslint src/",
     "lint:fix": "eslint --fix src/ && yarn prettier --write src",
     "lint:prettier": "prettier --check src",
-    "prepare": "yarn build:prod"
+    "prepublishOnly": "yarn build:prod"
   },
   "repository": {
     "type": "git",
