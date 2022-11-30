@@ -6,6 +6,7 @@ on:
       releaseVersion:
         description: 'Release version (ie. major, minor, patch)'
         required: true
+        type: choice
         options:
           - major
           - minor
