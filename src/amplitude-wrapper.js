@@ -12,6 +12,23 @@
           var r = t.createElement("script");
           r.type = "text/javascript", r.integrity = "sha384-QhZkEQJe2NFJ4yDkn/RFnD+NP0FINrep4tUh958v8McXRqszeRUQWbwBCfFqZvnF", r.crossOrigin = "anonymous", r.async = !0, r.src = "https://cdn.amplitude.com/libs/marketing-analytics-browser-0.2.0-min.js.gz", r.onload = function() {
               e.amplitude.runQueuedFunctions || console.log("[Amplitude] Error: could not load SDK")
+              var gtmLibraryPlugin = () => {
+                  return {
+                      name: 'gtm-library-enrichment',
+                      type: 'enrichment',
+                      setup: async () => undefined,
+                      execute: async (event) => {
+                          event['library'] = `amplitude-ts-gtm/3.0.0-beta.4`
+                          return event;
+                      },
+                  };
+              };
+
+              let _init = e.amplitude.init; // avoid infinite loop
+              // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
+              e.amplitude.init = (...args) => _init(...args).promise.then(() =>
+                  e.amplitude.add(gtmLibraryPlugin())
+              );
           };
           var s = t.getElementsByTagName("script")[0];
 
@@ -66,7 +83,7 @@
 
 /* Amplitude Wrapper begin */
 (function(a,p) {
-  
+
   // If window.amplitude doesn't exist, return
   if (!a.amplitude || typeof a.amplitude.init !== 'function') return;
 
@@ -114,7 +131,7 @@
    */
   var identify = function(args, group) {
       args = args.shift();
-      
+
       // Validate identify args
       if (!Array.isArray(args) || args.length === 0) return;
 
@@ -129,7 +146,7 @@
 
           // If not a valid "identify" command, return
           if (identifyEnum.indexOf(cmd) === -1) return;
-          
+
           identifyInstance[cmd].apply(identifyInstance, identifyParams);
       });
 
@@ -151,7 +168,7 @@
    *     ['prepend', 'someOtherGroupUserProp', 'someValue']
    *   ]
    * );
-   * 
+   *
    */
   var groupIdentify = function(args) {
       // Validate the arguments
@@ -174,7 +191,7 @@
    *   revenueType: 'purchase',
    *   eventProperties: {'someKey': 'someValue}
    * }
-   * 
+   *
    */
   var revenue = function(args) {
       args = args.shift();
@@ -191,12 +208,12 @@
       a.amplitude.revenue(revenue);
   };
 
+
   // Build the command wrapper logic
   a[p] = a[p] || function() {
-
       // Build array out of arguments
       var args = [].slice.call(arguments, 0);
-      
+
       // Pick the first argument as the command
       var cmd = args.shift();
 
@@ -214,7 +231,6 @@
 
       // Otherwise call the method and pass the arguments
       return a.amplitude[cmd].apply(this, args);
-
   };
 })(window, '_amplitude')
 /* Amplitude wrapper end */
