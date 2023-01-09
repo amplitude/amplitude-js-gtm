@@ -1,3 +1,5 @@
+import { version } from '../package.json';
+
 /* Amplitude JavaScript SDK begin */
 ! function() {
   "use strict";
@@ -18,7 +20,7 @@
                       type: 'enrichment',
                       setup: async () => undefined,
                       execute: async (event) => {
-                          event['library'] = `amplitude-ts-gtm/3.0.0-beta.4`
+                          event['library'] = `amplitude-ts-gtm/${version}`;
                           return event;
                       },
                   };
@@ -26,9 +28,11 @@
 
               let _init = e.amplitude.init; // avoid infinite loop
               // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
-              e.amplitude.init = (...args) => _init(...args).promise.then(() =>
-                  e.amplitude.add(gtmLibraryPlugin())
-              );
+              e.amplitude.init = (...args) => {
+                let client = _init(...args);
+                client.promise.then(() => e.amplitude.add(gtmLibraryPlugin()));
+                return client;
+              };
           };
           var s = t.getElementsByTagName("script")[0];
 
