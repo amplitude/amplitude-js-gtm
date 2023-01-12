@@ -29,10 +29,11 @@ import { version } from '../package.json';
               let _init = e.amplitude.init; // avoid infinite loop
               // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
               e.amplitude.init = (...args) => {
-                let client = _init(...args);
-                client.promise.then(() => e.amplitude.add(gtmLibraryPlugin()));
-                return client;
+                  let client = _init(...args);
+                  client.promise.then(() => e.amplitude.add(gtmLibraryPlugin()));
+                  return client;
               };
+              runWrapper(window, '_amplitude');
           };
           var s = t.getElementsByTagName("script")[0];
 
@@ -86,7 +87,7 @@ import { version } from '../package.json';
 /* Amplitude JavaScript SDK end */
 
 /* Amplitude Wrapper begin */
-(function(a,p) {
+function runWrapper(a,p) {
 
   // If window.amplitude doesn't exist, return
   if (!a.amplitude || typeof a.amplitude.init !== 'function') return;
@@ -236,5 +237,5 @@ import { version } from '../package.json';
       // Otherwise call the method and pass the arguments
       return a.amplitude[cmd].apply(this, args);
   };
-})(window, '_amplitude')
+}
 /* Amplitude wrapper end */
