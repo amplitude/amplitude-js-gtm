@@ -14,25 +14,6 @@ import { version } from '../package.json';
           var r = t.createElement("script");
           r.type = "text/javascript", r.integrity = "sha384-QhZkEQJe2NFJ4yDkn/RFnD+NP0FINrep4tUh958v8McXRqszeRUQWbwBCfFqZvnF", r.crossOrigin = "anonymous", r.async = !0, r.src = "https://cdn.amplitude.com/libs/marketing-analytics-browser-0.2.0-min.js.gz", r.onload = function() {
               e.amplitude.runQueuedFunctions || console.log("[Amplitude] Error: could not load SDK")
-              var gtmLibraryPlugin = () => {
-                  return {
-                      name: 'gtm-library-enrichment',
-                      type: 'enrichment',
-                      setup: async () => undefined,
-                      execute: async (event) => {
-                          event['library'] = `amplitude-ts-gtm/${version}`;
-                          return event;
-                      },
-                  };
-              };
-
-              let _init = e.amplitude.init; // avoid infinite loop
-              // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
-              e.amplitude.init = (...args) => {
-                let client = _init(...args);
-                client.promise.then(() => e.amplitude.add(gtmLibraryPlugin()));
-                return client;
-              };
           };
           var s = t.getElementsByTagName("script")[0];
 
@@ -212,6 +193,27 @@ import { version } from '../package.json';
       a.amplitude.revenue(revenue);
   };
 
+  var gtmLibraryPlugin = () => {
+      return {
+          name: 'gtm-library-enrichment',
+          type: 'enrichment',
+          setup: async () => undefined,
+          execute: async (event) => {
+              event['library'] = `amplitude-ts-gtm/${version}`;
+              return event;
+          },
+      };
+  };
+
+  var init = function(args) {
+      // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
+      let client = a.amplitude.init(...args);
+      client.promise.then(
+          () => a.amplitude.add(gtmLibraryPlugin())
+      );
+      return client;
+  };
+
 
   // Build the command wrapper logic
   a[p] = a[p] || function() {
@@ -232,6 +234,8 @@ import { version } from '../package.json';
 
       // Handle GroupIdentify separately
       if (cmd === 'groupIdentify') return groupIdentify(args);
+
+      if (cmd === 'init') return init(args);
 
       // Otherwise call the method and pass the arguments
       return a.amplitude[cmd].apply(this, args);
