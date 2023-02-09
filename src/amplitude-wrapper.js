@@ -6,8 +6,6 @@ import { version } from '../package.json';
 
 /* Amplitude Wrapper begin */
 (function(a,p) {
-  var instances = {};
-
   // If window.amplitude doesn't exist, return
   if (!a.amplitude || typeof a.amplitude.init !== 'function') return;
 
@@ -161,10 +159,10 @@ import { version } from '../package.json';
 
       // Pick the first argument as the instance name
       var name = args.shift();
-      if (!instances[name]) {
-        instances[name] = a.amplitude.createInstance(name);
+      var client = a.amplitude._iq[name];
+      if (!client) {
+        client = a.amplitude.createInstance(name);
       }
-      var client = instances[name];
 
       // Pick the first argument as the command
       var cmd = args.shift();
