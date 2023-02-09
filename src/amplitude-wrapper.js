@@ -1,73 +1,12 @@
 import { version } from '../package.json';
 
 /* Amplitude JavaScript SDK begin */
-! function() {
-  "use strict";
-  ! function(e, t) {
-      var n = e.amplitude || {
-          _q: [],
-          _iq: []
-      };
-      if (n.invoked) e.console && console.error && console.error("Amplitude snippet has been loaded.");
-      else {
-          n.invoked = !0;
-          var r = t.createElement("script");
-          r.type = "text/javascript", r.integrity = "sha384-QhZkEQJe2NFJ4yDkn/RFnD+NP0FINrep4tUh958v8McXRqszeRUQWbwBCfFqZvnF", r.crossOrigin = "anonymous", r.async = !0, r.src = "https://cdn.amplitude.com/libs/marketing-analytics-browser-0.2.0-min.js.gz", r.onload = function() {
-              e.amplitude.runQueuedFunctions || console.log("[Amplitude] Error: could not load SDK")
-          };
-          var s = t.getElementsByTagName("script")[0];
-
-          function v(e, t) {
-              e.prototype[t] = function() {
-                  return this._q.push({
-                      name: t,
-                      args: Array.prototype.slice.call(arguments, 0)
-                  }), this
-              }
-          }
-          s.parentNode.insertBefore(r, s);
-          for (var o = function() {
-                  return this._q = [], this
-              }, i = ["add", "append", "clearAll", "prepend", "set", "setOnce", "unset", "preInsert", "postInsert", "remove", "getUserProperties"], a = 0; a < i.length; a++) v(o, i[a]);
-          n.Identify = o;
-          for (var u = function() {
-                  return this._q = [], this
-              }, c = ["getEventProperties", "setProductId", "setQuantity", "setPrice", "setRevenue", "setRevenueType", "setEventProperties"], p = 0; p < c.length; p++) v(u, c[p]);
-          n.Revenue = u;
-          var l = ["getDeviceId", "setDeviceId", "getSessionId", "setSessionId", "getUserId", "setUserId", "setOptOut", "setTransport", "reset"],
-              d = ["init", "add", "remove", "track", "logEvent", "identify", "groupIdentify", "setGroup", "revenue", "flush"];
-
-          function f(e) {
-              function t(t, n) {
-                  e[t] = function() {
-                      var r = {
-                          promise: new Promise((n => {
-                              e._q.push({
-                                  name: t,
-                                  args: Array.prototype.slice.call(arguments, 0),
-                                  resolve: n
-                              })
-                          }))
-                      };
-                      if (n) return r
-                  }
-              }
-              for (var n = 0; n < l.length; n++) t(l[n], !1);
-              for (var r = 0; r < d.length; r++) t(d[r], !0)
-          }
-          f(n), n.createInstance = function() {
-              var e = n._iq.push({
-                  _q: []
-              }) - 1;
-              return f(n._iq[e]), n._iq[e]
-          }, e.amplitude = n
-      }
-  }(window, document)
-}();
+!function(){"use strict";!function(e,t){var n=e.amplitude||{_q:[],_iq:{}};if(n.invoked)e.console&&console.error&&console.error("Amplitude snippet has been loaded.");else{var r=function(e,t){e.prototype[t]=function(){return this._q.push({name:t,args:Array.prototype.slice.call(arguments,0)}),this}},s=function(e,t,n){return function(r){e._q.push({name:t,args:Array.prototype.slice.call(n,0),resolve:r})}},o=function(e,t,n){e[t]=function(){if(n)return{promise:new Promise(s(e,t,Array.prototype.slice.call(arguments)))}}},i=function(e){for(var t=0;t<m.length;t++)o(e,m[t],!1);for(var n=0;n<y.length;n++)o(e,y[n],!0)};n.invoked=!0;var a=t.createElement("script");a.type="text/javascript",a.integrity="sha384-D3GO8BuPsJOXpw91yAMykYKOR35cmmZ15qHBaEcl5aU3po1Xnyw2m+J4lL2+Cs1t",a.crossOrigin="anonymous",a.async=!0,a.src="https://cdn.amplitude.com/libs/marketing-analytics-browser-0.4.0-min.js.gz",a.onload=function(){e.amplitude.runQueuedFunctions||console.log("[Amplitude] Error: could not load SDK")};var c=t.getElementsByTagName("script")[0];c.parentNode.insertBefore(a,c);for(var u=function(){return this._q=[],this},l=["add","append","clearAll","prepend","set","setOnce","unset","preInsert","postInsert","remove","getUserProperties"],p=0;p<l.length;p++)r(u,l[p]);n.Identify=u;for(var d=function(){return this._q=[],this},f=["getEventProperties","setProductId","setQuantity","setPrice","setRevenue","setRevenueType","setEventProperties"],v=0;v<f.length;v++)r(d,f[v]);n.Revenue=d;var m=["getDeviceId","setDeviceId","getSessionId","setSessionId","getUserId","setUserId","setOptOut","setTransport","reset"],y=["init","add","remove","track","logEvent","identify","groupIdentify","setGroup","revenue","flush"];i(n),n.createInstance=function(e){return n._iq[e]={_q:[]},i(n._iq[e]),n._iq[e]},e.amplitude=n}}(window,document)}();
 /* Amplitude JavaScript SDK end */
 
 /* Amplitude Wrapper begin */
 (function(a,p) {
+  var instances = {};
 
   // If window.amplitude doesn't exist, return
   if (!a.amplitude || typeof a.amplitude.init !== 'function') return;
@@ -114,7 +53,7 @@ import { version } from '../package.json';
    * ]);
    *
    */
-  var identify = function(args, group) {
+  var identify = function(client, args, group) {
       args = args.shift();
 
       // Validate identify args
@@ -138,7 +77,7 @@ import { version } from '../package.json';
       // If this API is used with groupIdentify, return the Identify object
       if (group === true) return identifyInstance;
 
-      a.amplitude.identify(identifyInstance);
+      client.identify(identifyInstance);
   };
 
   /* The groupIdentify API is similar to identify, except you also need to collect
@@ -155,16 +94,16 @@ import { version } from '../package.json';
    * );
    *
    */
-  var groupIdentify = function(args) {
+  var groupIdentify = function(client, args) {
       // Validate the arguments
       if (args.length < 3) return;
       if (typeof args[0] !== 'string' || typeof args[1] !== 'string') return;
       if (!Array.isArray(args[2]) || args[2].length === 0) return;
 
       // Get the Identify instance object
-      var groupIdentifyInstance = identify([args[2]], true);
+      var groupIdentifyInstance = identify(client, [args[2]], true);
 
-      a.amplitude.groupIdentify(args[0], args[1], groupIdentifyInstance);
+      client.groupIdentify(args[0], args[1], groupIdentifyInstance);
   };
 
   /* To send revenue, you need to pass an object to the command:
@@ -178,7 +117,7 @@ import { version } from '../package.json';
    * }
    *
    */
-  var revenue = function(args) {
+  var revenue = function(client, args) {
       args = args.shift();
       // Validate revenue args
       if (!args.price || !args.productId)  return;
@@ -190,7 +129,7 @@ import { version } from '../package.json';
           .setRevenueType(args.revenueType || '')
           .setEventProperties(args.eventProperties || {});
 
-      a.amplitude.revenue(revenue);
+      client.revenue(revenue);
   };
 
   var gtmLibraryPlugin = () => {
@@ -205,13 +144,13 @@ import { version } from '../package.json';
       };
   };
 
-  var init = function(args) {
+  var init = function(client, args) {
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
-      let client = a.amplitude.init(...args);
-      client.promise.then(
-          () => a.amplitude.add(gtmLibraryPlugin())
+      let promise = client.init(...args).promise;
+      promise.then(
+          () => client.add(gtmLibraryPlugin())
       );
-      return client;
+      return promise;
   };
 
 
@@ -220,6 +159,13 @@ import { version } from '../package.json';
       // Build array out of arguments
       var args = [].slice.call(arguments, 0);
 
+      // Pick the first argument as the instance name
+      var name = args.shift();
+      if (!instances[name]) {
+        instances[name] = a.amplitude.createInstance(name);
+      }
+      var client = instances[name];
+
       // Pick the first argument as the command
       var cmd = args.shift();
 
@@ -227,18 +173,18 @@ import { version } from '../package.json';
       if (eventEnum.indexOf(cmd) === -1) return;
 
       // Handle Revenue separately
-      if (cmd === 'revenue') return revenue(args);
+      if (cmd === 'revenue') return revenue(client, args);
 
       // Handle Identify separately
-      if (cmd === 'identify') return identify(args);
+      if (cmd === 'identify') return identify(client, args);
 
       // Handle GroupIdentify separately
-      if (cmd === 'groupIdentify') return groupIdentify(args);
+      if (cmd === 'groupIdentify') return groupIdentify(client, args);
 
-      if (cmd === 'init') return init(args);
+      if (cmd === 'init') return init(client, args);
 
       // Otherwise call the method and pass the arguments
-      return a.amplitude[cmd].apply(this, args);
+      return client[cmd].apply(this, args);
   };
 })(window, '_amplitude')
 /* Amplitude wrapper end */
