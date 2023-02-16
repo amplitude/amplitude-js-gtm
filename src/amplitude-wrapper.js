@@ -159,7 +159,7 @@ import { version } from '../package.json';
 
       // Pick the first argument as the instance name
       var name = args.shift();
-      var client = name === "$default_instance" ? a.amplitude : a.amplitude._iq[name];
+      var client = name ? a.amplitude : a.amplitude._iq[name];
       if (!client) {
         client = a.amplitude.createInstance(name);
       }
