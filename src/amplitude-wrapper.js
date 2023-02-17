@@ -158,9 +158,11 @@
 
       // Pick the first argument as the instance name
       var name = args.shift();
+      console.log("name in wrapper: ", name);
       var client = name ? a.amplitude : a.amplitude._iq[name];
       if (!client) {
         client = a.amplitude.createInstance(name);
+        console.log("no client");
       }
 
       // Pick the first argument as the command
