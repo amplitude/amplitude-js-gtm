@@ -7,8 +7,8 @@ import { version } from '../package.json';
 /* Amplitude Wrapper begin */
 (function(a,p) {
   // If window.amplitudeGTM doesn't exist, return
-  const globalAmpltidue = a.amplitudeGTM;
-  if (!globalAmpltidue || typeof globalAmpltidue.init !== 'function') return;
+  const globalAmplitude = a.amplitudeGTM;
+  if (!globalAmplitude || typeof globalAmplitude.init !== 'function') return;
 
   // Enumerate available events
   var eventEnum = [
@@ -58,7 +58,7 @@ import { version } from '../package.json';
       // Validate identify args
       if (!Array.isArray(args) || args.length === 0) return;
 
-      var identifyInstance = new globalAmpltidue.Identify();
+      var identifyInstance = new globalAmplitude.Identify();
 
       // Loop through the commands array and execute each
       args.forEach(function(identifyParams) {
@@ -121,7 +121,7 @@ import { version } from '../package.json';
       // Validate revenue args
       if (!args.price || !args.productId)  return;
 
-      var revenue = new globalAmpltidue.Revenue()
+      var revenue = new globalAmplitude.Revenue()
           .setProductId(args.productId)
           .setQuantity(args.quantity || 1)
           .setPrice(args.price)
@@ -160,9 +160,9 @@ import { version } from '../package.json';
 
       // Pick the first argument as the instance name
       var name = args.shift();
-      var client = !name ? globalAmpltidue : globalAmpltidue._iq[name];
+      var client = !name ? globalAmplitude : globalAmplitude._iq[name];
       if (!client) {
-        client = globalAmpltidue.createInstance(name);
+        client = globalAmplitude.createInstance(name);
       }
 
       // Pick the first argument as the command
