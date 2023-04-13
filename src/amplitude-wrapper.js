@@ -126,8 +126,8 @@ import { version } from '../package.json';
           .setQuantity(args.quantity || 1)
           .setPrice(args.price)
           .setRevenueType(args.revenueType || '')
-          .setEventProperties(args.eventProperties || {});
-
+          .setEventProperties(args.eventProperties || {})
+          .setRevenue(args.revenue || (args.price * (args.quantity || 1)));
       client.revenue(revenue);
   };
 
