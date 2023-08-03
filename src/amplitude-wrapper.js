@@ -149,7 +149,7 @@ import { version } from '../package.json';
         type: 'enrichment',
         setup: async () => undefined,
         execute: async (event) => {
-            if (event.event_type = '[Amplitude] Page Viewed') {
+            if (event.event_type == '[Amplitude] Page Viewed') {
                 event.event_type = 'Page View';
                 event.event_properties.page_domain = event.event_properties['[Amplitude] Page Domain'];
                 event.event_properties.page_location = event.event_properties['[Amplitude] Page Location'];
