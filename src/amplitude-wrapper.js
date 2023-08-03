@@ -143,12 +143,42 @@ import { version } from '../package.json';
       };
   };
 
+  var pageViewPlugin = () => {
+    return {
+        name: 'page-view-plugin',
+        type: 'enrichment',
+        setup: async () => undefined,
+        execute: async (event) => {
+            if (event.event_type = '[Amplitude] Page Viewed') {
+                event.event_type = 'Page View';
+                event.event_properties.page_domain = event.event_properties['[Amplitude] Page Domain'];
+                event.event_properties.page_location = event.event_properties['[Amplitude] Page Location'];
+                event.event_properties.page_path = event.event_properties['[Amplitude] Page Path'];
+                event.event_properties.page_title = event.event_properties['[Amplitude] Page Title'];
+                event.event_properties.page_url = event.event_properties['[Amplitude] Page URL'];
+                delete event.event_properties['[Amplitude] Page Domain'];
+                delete event.event_properties['[Amplitude] Page Location'];
+                delete event.event_properties['[Amplitude] Page Path'];
+                delete event.event_properties['[Amplitude] Page Title'];
+                delete event.event_properties['[Amplitude] Page URL'];
+            }
+            return event;
+        },
+    };
+  }
+
   var init = function(client, args) {
       const argsLength = args.length;
       const configuration =  args[argsLength - 1];
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
+      const pageViewLegacy = configuration['pageViewLegacy'];
+
       if (userAgentEnrichment) {
         client.add(userAgentEnrichmentPlugin(userAgentEnrichmentOptions));
+      }
+
+      if (pageViewLegacy) {
+        client.add(pageViewPlugin())
       }
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
       let promise = client.init(...args).promise;
