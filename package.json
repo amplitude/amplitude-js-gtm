@@ -21,10 +21,6 @@
     "url": "https://github.com/amplitude/amplitude-js-gtm/issues"
   },
   "homepage": "https://github.com/amplitude/amplitude-js-gtm#readme",
-  "dependencies": {
-    "@amplitude/plugin-user-agent-enrichment-browser": "^1.0.0",
-    "@amplitude/plugin-page-view-v1-enrichment-browser":  "^1.0.0"
-  },
   "devDependencies": {
     "@amplitude/eslint-plugin-amplitude": "^1.0.1",
     "eslint": "^8.2.0",
