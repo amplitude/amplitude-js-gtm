@@ -65,6 +65,12 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
           npm whoami
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::358203115967:role/github-actions-role
+          aws-region: us-west-2
+
       - name: Create new version
         run: |
           CURRENT_VERSION=$(npm info . version)
@@ -76,3 +82,15 @@ jobs:
       - name: Pubish package
         run: |
           npm publish
+
+      - name: Build package
+        if: "${{ env.RELEASE_BRANCH === 'v3.x' }}"
+        run: |
+          npm run build:prod
+
+      - name: Publish to Amplitude CDN
+        if: "${{ env.RELEASE_BRANCH === 'v3.x' }}"
+        run: |
+          npm run deploy
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
