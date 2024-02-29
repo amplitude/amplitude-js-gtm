@@ -9,7 +9,8 @@
     "lint:eslint": "eslint src/",
     "lint:fix": "eslint --fix src/ && yarn prettier --write src",
     "lint:prettier": "prettier --check src",
-    "prepublishOnly": "yarn build:prod"
+    "prepublishOnly": "yarn build:prod",
+    "deploy": "node ./scripts/upload-to-s3.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "homepage": "https://github.com/amplitude/amplitude-js-gtm#readme",
   "devDependencies": {
     "@amplitude/eslint-plugin-amplitude": "^1.0.1",
+    "@aws-sdk/client-s3": "^3.229.0",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
