@@ -84,12 +84,12 @@ jobs:
           npm publish
 
       - name: Build package
-        if: "${{ env.RELEASE_BRANCH === 'v3.x' }}"
+        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
         run: |
           npm run build:prod
 
       - name: Publish to Amplitude CDN
-        if: "${{ env.RELEASE_BRANCH === 'v3.x' }}"
+        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
         run: |
           npm run deploy
         env:
