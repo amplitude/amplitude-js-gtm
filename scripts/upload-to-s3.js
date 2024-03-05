@@ -6,7 +6,7 @@ const bucket = process.env.S3_BUCKET_NAME;
 const gtmWrapper = `./dist/index.js`;
 
 const getVersion = () => pkg.version;
-let deployedCount = 0;
+let deployed = false;
 const body = fs.readFileSync(path.join(process.cwd(), gtmWrapper));
 const key = `libs/analytics-browser-gtm-wrapper-${getVersion()}.js`;
 const client = new S3Client();
@@ -29,24 +29,23 @@ const promise = client
         Bucket: bucket,
         CacheControl: 'max-age=31536000',
         ContentType: 'application/javascript',
-        ContentEncoding: 'gzip',
         Key: key,
       });
       return client
         .send(putObject)
         .then(() => {
           console.log(`[Publish to AWS S3] Upload success for ${key}.`);
-          deployedCount += 1;
+          deployed = true;
         })
         .catch(console.error);
     });
 
   promise
   .then(() => {
-    if (deployedCount === 0) {
-      console.log(`[Publish to AWS S3] Complete! Nothing to deploy.`);
+    if (deployed) {
+      console.log(`[Publish to AWS S3] Success! Deployed.`);
     } else {
-      console.log(`[Publish to AWS S3] Success! Deployed ${deployedCount}/${files.length} files.`);
+      console.log(`[Publish to AWS S3] Complete! Nothing to deploy.`);
     }
     console.log('[Publish to AWS S3] END');
   })
