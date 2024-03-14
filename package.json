@@ -25,7 +25,7 @@
   "devDependencies": {
     "@amplitude/eslint-plugin-amplitude": "^1.0.1",
     "@aws-sdk/client-s3": "^3.229.0",
-    "compression-webpack-plugin": "^11.1.0",
+    "compression-webpack-plugin": "^10.0.0",
     "eslint": "^8.2.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
