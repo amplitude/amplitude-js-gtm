@@ -3,12 +3,12 @@ const path = require('path');
 const pkg = require(path.join(process.cwd(), 'package.json'));
 const { S3Client, PutObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
 const bucket = process.env.S3_BUCKET_NAME;
-const gtmWrapper = `./dist/index.js`;
+const gtmWrapper = `./dist/index.js.br`;
 
 const getVersion = () => pkg.version;
 let deployed = false;
 const body = fs.readFileSync(path.join(process.cwd(), gtmWrapper));
-const key = `libs/analytics-browser-gtm-wrapper-${getVersion()}.js`;
+const key = `libs/analytics-browser-gtm-wrapper-${getVersion()}.js.br`;
 const client = new S3Client();
 const headObject = new HeadObjectCommand({
   Bucket: bucket,
