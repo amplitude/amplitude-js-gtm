@@ -323,12 +323,12 @@ window._amplitude(
 ```
 
 ## `setTransport`
-Set the transport type to one of `xhr`, `sendBeacon`, or `fetch`.
+Set the transport type to one of `xhr`, `beacon`, or `fetch`.
 
 Example:
 ```
 window._amplitude(
-  'setTransportType',
-  'sendBeacon'
+  'setTransport',
+  'beacon'
 );
 ```
