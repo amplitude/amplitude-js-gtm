@@ -1,0 +1,28 @@
+name: analytics-browser-gtm Script Check
+
+on:
+  push:
+    branches:
+      - v3.x
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - v3.x
+
+jobs:
+  script-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out git repository
+        uses: actions/checkout@v3
+          
+      - name: Scan for analytics-browser-gtm script
+        run: |
+          if grep -Po 'https://cdn\.amplitude\.com/libs/analytics-browser-gtm-\d+\.\d+\.\d+-min\.js\.gz' src/amplitude-wrapper.js; then
+            echo "Amplitude analytics-browser-gtm found in file"
+          else
+            echo "No specific Amplitude URL found in file"
+            exit 1 # Missing Amplitude analytics-browser-gtm script
+            exit 1 
+          fi
