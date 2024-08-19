@@ -161,11 +161,11 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       console.log("amplitude-wrapper.js, init, excludeReferrersRegex: ", configuration.defaultTracking.attribution.excludeReferrersRegex);
 
       const excludeReferrers = [];
-      if (!configuration.defaultTracking.attribution.excludeReferrersText){
+      if (configuration.defaultTracking.attribution.excludeReferrersText){
           excludeReferrers.push(...configuration.defaultTracking.attribution.excludeReferrersText);
           delete configuration.defaultTracking.attribution.excludeReferrersText;
       }
-      if (!configuration.defaultTracking.attribution.excludeReferrersRegex){
+      if (configuration.defaultTracking.attribution.excludeReferrersRegex){
           const excludeReferrersRegex = configuration.defaultTracking.attribution.excludeReferrersRegex.map(item => new RegExp(item));
           excludeReferrers.push(...excludeReferrersRegex);
           delete configuration.defaultTracking.attribution.excludeReferrersRegex;
