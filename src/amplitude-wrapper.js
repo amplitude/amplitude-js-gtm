@@ -169,8 +169,10 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 
       delete configuration.defaultTracking.attribution.excludeReferrersText;
       delete configuration.defaultTracking.attribution.excludeReferrersRegex;
+      configuration.excludeReferrers = excludeReferrers;
 
       console.log("amplitude-wrapper.js, init, excludeReferrers: ", excludeReferrers);
+      console.log("amplitude-wrapper.js, init, args after : ", args);
 
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
       const pageViewLegacy = configuration['pageViewLegacy'];
@@ -182,10 +184,6 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       if (pageViewLegacy) {
         client.add(amplitudePageViewV1EnrichmentPlugin.pageViewV1EnrichmentPlugin())
       }
-
-      console.log("amplitude-wrapper.js, init, args before: ", args);
-      args[argsLength - 1].defaultTracking.attribution.excludeReferrers = excludeReferrers;
-      console.log("amplitude-wrapper.js, init, args after : ", args);
 
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
       let promise = client.init(...args).promise;
