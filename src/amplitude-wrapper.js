@@ -161,14 +161,15 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       console.log("amplitude-wrapper.js, init, excludeReferrersRegex: ", configuration.defaultTracking.attribution.excludeReferrersRegex);
 
       const excludeReferrers = [];
-      excludeReferrers.push(...configuration.defaultTracking.attribution.excludeReferrersText);
-      // Convert every item in configuration.defaultTracking.attribution.excludeReferrersRegex from string to regex
-      const excludeReferrersRegex = configuration.defaultTracking.attribution.excludeReferrersRegex.map(item => new RegExp(item));
-      // Append the converted regex items to excludeReferrers
-      excludeReferrers.push(...excludeReferrersRegex);
-
-      delete configuration.defaultTracking.attribution.excludeReferrersText;
-      delete configuration.defaultTracking.attribution.excludeReferrersRegex;
+      if (!configuration.defaultTracking.attribution.excludeReferrersText){
+          excludeReferrers.push(...configuration.defaultTracking.attribution.excludeReferrersText);
+          delete configuration.defaultTracking.attribution.excludeReferrersText;
+      }
+      if (!configuration.defaultTracking.attribution.excludeReferrersRegex){
+          const excludeReferrersRegex = configuration.defaultTracking.attribution.excludeReferrersRegex.map(item => new RegExp(item));
+          excludeReferrers.push(...excludeReferrersRegex);
+          delete configuration.defaultTracking.attribution.excludeReferrersRegex;
+      }
       configuration.defaultTracking.attribution.excludeReferrers = excludeReferrers;
 
       console.log("amplitude-wrapper.js, init, excludeReferrers: ", excludeReferrers);
