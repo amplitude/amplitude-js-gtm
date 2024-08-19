@@ -155,16 +155,12 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       const argsLength = args.length;
       const configuration = args[argsLength - 1];
 
-      const excludeReferrers = [];
-      if (configuration.defaultTracking.attribution.excludeReferrersText){
-          excludeReferrers.push(...configuration.defaultTracking.attribution.excludeReferrersText);
-          delete configuration.defaultTracking.attribution.excludeReferrersText;
-      }
-      if (configuration.defaultTracking.attribution.excludeReferrersRegex){
-          const excludeReferrersRegex = configuration.defaultTracking.attribution.excludeReferrersRegex.map(item => new RegExp(item));
-          excludeReferrers.push(...excludeReferrersRegex);
-          delete configuration.defaultTracking.attribution.excludeReferrersRegex;
-      }
+      const excludeReferrers = [
+        ...configuration.defaultTracking.attribution.excludeReferrersText || [],
+        ...configuration.defaultTracking.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || []
+      ];
+      delete configuration.defaultTracking.attribution.excludeReferrersText;
+      delete configuration.defaultTracking.attribution.excludeReferrersRegex;
       configuration.defaultTracking.attribution.excludeReferrers = excludeReferrers;
 
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
