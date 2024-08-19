@@ -169,7 +169,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 
       delete configuration.defaultTracking.attribution.excludeReferrersText;
       delete configuration.defaultTracking.attribution.excludeReferrersRegex;
-      configuration.excludeReferrers = excludeReferrers;
+      configuration.defaultTracking.attribution.excludeReferrers = excludeReferrers;
 
       console.log("amplitude-wrapper.js, init, excludeReferrers: ", excludeReferrers);
       console.log("amplitude-wrapper.js, init, args after : ", args);
