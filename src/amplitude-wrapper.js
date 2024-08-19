@@ -143,7 +143,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
           type: 'enrichment',
           setup: async () => undefined,
           execute: async (event) => {
-              event['library'] = `amplitude-ts-gtm/${version}`;
+              event['library'] = `amplitude-ts-gtm/3.9.0`;
               return event;
           },
       };
