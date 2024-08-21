@@ -1,0 +1,99 @@
+name: Continuous Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version (ie. major, minor, patch)'
+        required: true
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+      releaseBranch:
+        description: 'Release branch (ie. main)'
+        required: true
+        default: 'main'
+
+jobs:
+  authorize:
+    name: Authorize
+    runs-on: ubuntu-latest
+    steps:
+      - name: ${{ github.actor }} permission check to do a release
+        uses: 'lannonbr/repo-permission-check-action@2.0.2'
+        with:
+          permission: 'admin'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [authorize]
+    permissions:
+      id-token: write
+      contents: write
+    env:
+      RELEASE_VERSION: ${{ github.event.inputs.releaseVersion }}
+      RELEASE_BRANCH: ${{ github.event.inputs.releaseBranch }}
+
+    steps:
+      - name: Check out git repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.RELEASE_BRANCH }}
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install project dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name amplitude-sdk-bot
+          git config --global user.email amplitude-sdk-bot@users.noreply.github.com
+
+      - name: Configure NPM User
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
+          npm whoami
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::358203115967:role/github-actions-role
+          aws-region: us-west-2
+
+      - name: Create new version
+        run: |
+          CURRENT_VERSION=$(npm info . version)
+          STAGED_VERSION=$(npx semver $CURRENT_VERSION -i ${{ env.RELEASE_VERSION }} --preid beta)
+          npm version $STAGED_VERSION
+          git push
+          git push origin v$STAGED_VERSION
+
+      - name: Pubish package
+        run: |
+          npm publish
+
+      - name: Build package
+        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
+        run: |
+          npm run build:prod
+
+      - name: Publish to Amplitude CDN
+        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
+        run: |
+          npm run deploy
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
