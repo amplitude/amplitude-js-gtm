@@ -1,4 +1,4 @@
-name: Continuous Deployment
+name: Publish v3.x
 
 on:
   workflow_dispatch:
