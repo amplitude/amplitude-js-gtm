@@ -8,17 +8,11 @@ on:
         required: true
         type: choice
         options:
-          - major
           - minor
           - patch
-          - premajor
           - preminor
           - prepatch
           - prerelease
-      releaseBranch:
-        description: 'Release branch (ie. main)'
-        required: true
-        default: 'main'
 
 jobs:
   authorize:
@@ -41,13 +35,12 @@ jobs:
       contents: write
     env:
       RELEASE_VERSION: ${{ github.event.inputs.releaseVersion }}
-      RELEASE_BRANCH: ${{ github.event.inputs.releaseBranch }}
 
     steps:
       - name: Check out git repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.RELEASE_BRANCH }}
+          ref: v3.x
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
@@ -87,12 +80,10 @@ jobs:
           npm publish
 
       - name: Build package
-        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
         run: |
           npm run build:prod
 
       - name: Publish to Amplitude CDN
-        if: "${{ env.RELEASE_BRANCH == 'v3.x' }}"
         run: |
           npm run deploy
         env:
