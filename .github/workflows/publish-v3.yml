@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       releaseVersion:
-        description: 'Release version (ie. major, minor, patch)'
+        description: 'Release version (ie. minor, patch)'
         required: true
         type: choice
         options:
