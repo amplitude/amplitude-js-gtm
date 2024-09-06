@@ -155,14 +155,33 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       const argsLength = args.length;
       const configuration = args[argsLength - 1];
 
-      if (configuration.defaultTracking.attribution) {
+      if (configuration.autocapture.attribution) {
         const excludeReferrers = [
-          ...(configuration.defaultTracking.attribution.excludeReferrersText || []),
-          ...(configuration.defaultTracking.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || [])
+          ...(configuration.autocapture.attribution.excludeReferrersText || []),
+          ...(configuration.autocapture.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || [])
         ];
-        delete configuration.defaultTracking.attribution.excludeReferrersText;
-        delete configuration.defaultTracking.attribution.excludeReferrersRegex;
-        configuration.defaultTracking.attribution.excludeReferrers = excludeReferrers;
+        delete configuration.autocapture.attribution.excludeReferrersText;
+        delete configuration.autocapture.attribution.excludeReferrersRegex;
+        configuration.autocapture.attribution.excludeReferrers = excludeReferrers;
+      }
+
+      if (configuration.autocapture.elementInteractions) {
+        const pageUrlAllowList = [
+          ...(configuration.autocapture.elementInteractions.pageUrlAllowListString || []),
+          ...(configuration.autocapture.elementInteractions.pageUrlAllowListRegex?.map(item => new RegExp(item)) || [])
+        ];
+        delete configuration.autocapture.elementInteractions.pageUrlAllowListString;
+        delete configuration.autocapture.elementInteractions.pageUrlAllowListRegex;
+        configuration.autocapture.elementInteractions.pageUrlAllowList = pageUrlAllowList;
+
+
+        const dataAttributePrefix = [
+          ...(configuration.autocapture.elementInteractions.dataAttributePrefixString || []),
+          ...(configuration.autocapture.elementInteractions.dataAttributePrefixRegex?.map(item => new RegExp(item)) || [])
+        ]
+        delete configuration.autocapture.elementInteractions.dataAttributePrefixString;
+        delete configuration.autocapture.elementInteractions.dataAttributePrefixRegex;
+        configuration.autocapture.elementInteractions.pageUrlAllowList = dataAttributePrefix; 
       }
       
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
