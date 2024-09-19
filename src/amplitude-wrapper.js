@@ -162,7 +162,10 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
         ];
         delete configuration.autocapture.attribution.excludeReferrersText;
         delete configuration.autocapture.attribution.excludeReferrersRegex;
-        configuration.autocapture.attribution.excludeReferrers = excludeReferrers;
+        // if pageUrlAllowList is empty, use default
+        if (excludeReferrers.length !== 0) {
+          configuration.autocapture.attribution.excludeReferrers = excludeReferrers;
+        }
       }
 
       if (configuration.autocapture.elementInteractions) {
@@ -172,7 +175,10 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
         ];
         delete configuration.autocapture.elementInteractions.pageUrlAllowListString;
         delete configuration.autocapture.elementInteractions.pageUrlAllowListRegex;
-        configuration.autocapture.elementInteractions.pageUrlAllowList = pageUrlAllowList;
+        // if pageUrlAllowList is empty, use default
+        if (pageUrlAllowList.length !== 0) {
+          configuration.autocapture.elementInteractions.pageUrlAllowList = pageUrlAllowList;
+        }
 
 
         const dataAttributePrefix = [
@@ -181,7 +187,10 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
         ]
         delete configuration.autocapture.elementInteractions.dataAttributePrefixString;
         delete configuration.autocapture.elementInteractions.dataAttributePrefixRegex;
-        configuration.autocapture.elementInteractions.pageUrlAllowList = dataAttributePrefix; 
+        // if pageUrlAllowList is empty, use default
+        if (dataAttributePrefix.length !== 0) {
+          configuration.autocapture.elementInteractions.dataAttributePrefix = dataAttributePrefix; 
+        }
       }
       
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
