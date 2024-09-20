@@ -155,14 +155,42 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       const argsLength = args.length;
       const configuration = args[argsLength - 1];
 
-      if (configuration.defaultTracking.attribution) {
+      if (configuration.autocapture.attribution) {
         const excludeReferrers = [
-          ...(configuration.defaultTracking.attribution.excludeReferrersText || []),
-          ...(configuration.defaultTracking.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || [])
+          ...(configuration.autocapture.attribution.excludeReferrersText || []),
+          ...(configuration.autocapture.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || [])
         ];
-        delete configuration.defaultTracking.attribution.excludeReferrersText;
-        delete configuration.defaultTracking.attribution.excludeReferrersRegex;
-        configuration.defaultTracking.attribution.excludeReferrers = excludeReferrers;
+        delete configuration.autocapture.attribution.excludeReferrersText;
+        delete configuration.autocapture.attribution.excludeReferrersRegex;
+        // if excludeReferrers is empty, use default
+        if (excludeReferrers.length !== 0) {
+          configuration.autocapture.attribution.excludeReferrers = excludeReferrers;
+        }
+      }
+
+      if (configuration.autocapture.elementInteractions) {
+        const pageUrlAllowlist = [
+          ...(configuration.autocapture.elementInteractions.pageUrlAllowlistString || []),
+          ...(configuration.autocapture.elementInteractions.pageUrlAllowlistRegex?.map(item => new RegExp(item)) || [])
+        ];
+        delete configuration.autocapture.elementInteractions.pageUrlAllowlistString;
+        delete configuration.autocapture.elementInteractions.pageUrlAllowlistRegex;
+        // if pageUrlAllowlist is empty, use default
+        if (pageUrlAllowlist.length !== 0) {
+          configuration.autocapture.elementInteractions.pageUrlAllowlist = pageUrlAllowlist;
+        }
+
+
+        const dataAttributePrefix = [
+          ...(configuration.autocapture.elementInteractions.dataAttributePrefixString || []),
+          ...(configuration.autocapture.elementInteractions.dataAttributePrefixRegex?.map(item => new RegExp(item)) || [])
+        ]
+        delete configuration.autocapture.elementInteractions.dataAttributePrefixString;
+        delete configuration.autocapture.elementInteractions.dataAttributePrefixRegex;
+        // if dataAttributePrefix is empty, use default
+        if (dataAttributePrefix.length !== 0) {
+          configuration.autocapture.elementInteractions.dataAttributePrefix = dataAttributePrefix; 
+        }
       }
       
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
