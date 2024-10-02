@@ -13,6 +13,8 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 /* Amplitude User Agent Enrichment Plugin end */
 
 /* Amplitude Wrapper begin */
+const LOG_PREFIX = '[Amplitude / GTM] ';
+
 (function(a,p) {
   // If window.amplitudeGTM doesn't exist, return
   const globalAmplitude = a.amplitudeGTM;
@@ -155,7 +157,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
     try {
       return new RegExp(expression);
     } catch(e) {
-      console.log(e);
+      console.error(`${LOG_PREFIX} - ${e}`);
       return [];
     }
  };
