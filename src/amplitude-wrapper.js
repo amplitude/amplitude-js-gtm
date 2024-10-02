@@ -68,6 +68,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 
       var identifyInstance = new globalAmplitude.Identify();
 
+      console.log(args);
       // Loop through the commands array and execute each
       args.forEach(function(identifyParams) {
           // If the operation is not in array format, return
@@ -82,6 +83,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       });
 
       // If this API is used with groupIdentify, return the Identify object
+      console.log(identifyInstance);
       if (group === true) return identifyInstance;
 
       client.identify(identifyInstance);
@@ -102,6 +104,8 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
    *
    */
   var groupIdentify = function(client, args) {
+    console.log("DEBUG IN GROUP IDENTIFY");
+        console.log(args);
       // Validate the arguments
       if (args.length < 3) return;
       if (typeof args[0] !== 'string' || typeof args[1] !== 'string') return;
@@ -151,6 +155,15 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       };
   };
 
+  var getRegExp = function(expression) {
+    try {
+      return new RegExp(expression);
+    } catch(e) {
+      console.log(e);
+      return [];
+    }
+ };
+
   var init = function(client, args) {
       const argsLength = args.length;
       const configuration = args[argsLength - 1];
@@ -158,7 +171,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       if (configuration.autocapture.attribution) {
         const excludeReferrers = [
           ...(configuration.autocapture.attribution.excludeReferrersText || []),
-          ...(configuration.autocapture.attribution.excludeReferrersRegex?.map(item => new RegExp(item)) || [])
+          ...(configuration.autocapture.attribution.excludeReferrersRegex?.map(item => getRegExp(item) || [])
         ];
         delete configuration.autocapture.attribution.excludeReferrersText;
         delete configuration.autocapture.attribution.excludeReferrersRegex;
@@ -171,7 +184,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
       if (configuration.autocapture.elementInteractions) {
         const pageUrlAllowlist = [
           ...(configuration.autocapture.elementInteractions.pageUrlAllowlistString || []),
-          ...(configuration.autocapture.elementInteractions.pageUrlAllowlistRegex?.map(item => new RegExp(item)) || [])
+          ...(configuration.autocapture.elementInteractions.pageUrlAllowlistRegex?.map(item => getRegExp(item)) || [])
         ];
         delete configuration.autocapture.elementInteractions.pageUrlAllowlistString;
         delete configuration.autocapture.elementInteractions.pageUrlAllowlistRegex;
@@ -183,7 +196,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 
         const dataAttributePrefix = [
           ...(configuration.autocapture.elementInteractions.dataAttributePrefixString || []),
-          ...(configuration.autocapture.elementInteractions.dataAttributePrefixRegex?.map(item => new RegExp(item)) || [])
+          ...(configuration.autocapture.elementInteractions.dataAttributePrefixRegex?.map(item => getRegExp(item)) || [])
         ]
         delete configuration.autocapture.elementInteractions.dataAttributePrefixString;
         delete configuration.autocapture.elementInteractions.dataAttributePrefixRegex;
