@@ -13,7 +13,7 @@ var amplitudeUserAgentEnrichmentPlugin=function(i){"use strict";var e=function()
 /* Amplitude User Agent Enrichment Plugin end */
 
 /* Amplitude Wrapper begin */
-const LOG_PREFIX = '[Amplitude / GTM] ';
+const LOG_PREFIX = '[Amplitude / GTM]';
 
 (function(a,p) {
   // If window.amplitudeGTM doesn't exist, return
