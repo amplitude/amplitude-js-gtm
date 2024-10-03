@@ -156,11 +156,22 @@ const LOG_PREFIX = '[Amplitude / GTM]';
   var getRegExp = function(expression) {
     try {
       return new RegExp(expression);
-    } catch(e) {
+    } catch (e) {
       console.error(`${LOG_PREFIX} - ${e}`);
-      return [];
+      return null;
     }
- };
+  };
+
+  var getValidExp = function (expArray) {
+    return expArray?.reduce((acc, item) => {
+      var regExp = getRegExp(item);
+      if (regExp !== null) {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
+  };
+
 
   var init = function(client, args) {
       const argsLength = args.length;
@@ -169,8 +180,9 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       if (configuration.autocapture.attribution) {
         const excludeReferrers = [
           ...(configuration.autocapture.attribution.excludeReferrersText || []),
-          ...(configuration.autocapture.attribution.excludeReferrersRegex?.map(item => getRegExp(item)) || [])
+          ...(getValidExp(configuration.autocapture.attribution.excludeReferrersRegex) || [])
         ];
+        console.log("excludeReferrers in gtm wrapper", excludeReferrers);
         delete configuration.autocapture.attribution.excludeReferrersText;
         delete configuration.autocapture.attribution.excludeReferrersRegex;
         // if excludeReferrers is empty, use default
@@ -182,7 +194,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       if (configuration.autocapture.elementInteractions) {
         const pageUrlAllowlist = [
           ...(configuration.autocapture.elementInteractions.pageUrlAllowlistString || []),
-          ...(configuration.autocapture.elementInteractions.pageUrlAllowlistRegex?.map(item => getRegExp(item)) || [])
+          ...(getValidExp(configuration.autocapture.elementInteractions.pageUrlAllowlistRegex) || [])
         ];
         delete configuration.autocapture.elementInteractions.pageUrlAllowlistString;
         delete configuration.autocapture.elementInteractions.pageUrlAllowlistRegex;
@@ -194,7 +206,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
 
         const dataAttributePrefix = [
           ...(configuration.autocapture.elementInteractions.dataAttributePrefixString || []),
-          ...(configuration.autocapture.elementInteractions.dataAttributePrefixRegex?.map(item => getRegExp(item)) || [])
+          ...(getValidExp(configuration.autocapture.elementInteractions.dataAttributePrefixRegex) || [])
         ]
         delete configuration.autocapture.elementInteractions.dataAttributePrefixString;
         delete configuration.autocapture.elementInteractions.dataAttributePrefixRegex;
