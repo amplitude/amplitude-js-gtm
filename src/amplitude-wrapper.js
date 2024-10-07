@@ -182,7 +182,6 @@ const LOG_PREFIX = '[Amplitude / GTM]';
           ...(configuration.autocapture.attribution.excludeReferrersText || []),
           ...(getValidExp(configuration.autocapture.attribution.excludeReferrersRegex) || [])
         ];
-        console.log("excludeReferrers in gtm wrapper", excludeReferrers);
         delete configuration.autocapture.attribution.excludeReferrersText;
         delete configuration.autocapture.attribution.excludeReferrersRegex;
         // if excludeReferrers is empty, use default
