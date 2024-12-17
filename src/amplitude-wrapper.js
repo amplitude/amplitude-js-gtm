@@ -49,7 +49,8 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       'setOnce',
       'remove',
       'preInsert',
-      'postInsert'
+      'postInsert',
+      'unset'
   ];
 
   /* To work with the identify API, pass an array of identify operations (each an array in itself)
@@ -59,6 +60,8 @@ const LOG_PREFIX = '[Amplitude / GTM]';
    *     ['add', 'someUserProp', 1],
    *     ['add', 'someOtherUserProp', 2],
    *     ['prepend', 'anotherUserProp', 'someValue']
+   *     ['unset', 'unsetUserProp', 'value is ignored']
+   *     ['clearAll', 'key is ignored', 'value is ignored']
    * ]);
    *
    */
@@ -80,6 +83,14 @@ const LOG_PREFIX = '[Amplitude / GTM]';
           // If not a valid "identify" command, return
           if (identifyEnum.indexOf(cmd) === -1) return;
 
+          if (cmd === 'unset') {
+            identifyInstance.unset(identifyParams[0]);
+          }
+
+          if (cmd === 'clearAll') {
+            identifyInstance.clearAll();
+          }
+          
           identifyInstance[cmd].apply(identifyInstance, identifyParams);
       });
 
