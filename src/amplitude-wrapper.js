@@ -18,8 +18,8 @@ var loadSessionReplayPlugin = (client) => {
   script.src = "https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.4.0-min.js.gz";
   script.onload = () => {
     // Once the script is loaded, add the session replay plugin
-    if (window.sessionReplayPlugin && window.sessionReplayPlugin.plugin()) {
-      client.add(window.sessionReplayPlugin.plugin({sampleRate: 0}));
+    if (window.sessionReplay && window.sessionReplay.plugin()) {
+      client.add(window.sessionReplay.plugin({sampleRate: 0}));
     } else {
       console.error("Failed to load the Session Replay plugin");
     }
@@ -260,7 +260,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       if(sessionReplayPlugin) {
         loadSessionReplayPlugin(client);
       }
-      
+
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
       let promise = client.init(...args).promise;
       promise.then(
