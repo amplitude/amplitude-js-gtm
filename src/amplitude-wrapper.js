@@ -242,14 +242,8 @@ const LOG_PREFIX = '[Amplitude / GTM]';
         client.add(amplitudePageViewV1EnrichmentPlugin.pageViewV1EnrichmentPlugin())
       }
 
-<<<<<<< HEAD
       if(sessionReplay) {
         client.add(sessionReplayPlugin.plugin());
-=======
-      console.log("sessionReplayPlugin", sessionReplayPlugin, sessionReplayPluginOptions);
-      if(sessionReplayPlugin) {
-        client.add(sessionReplay.plugin());
->>>>>>> 9ab33cc (Help logging)
       }
 
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
