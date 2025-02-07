@@ -233,7 +233,6 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
       const pageViewLegacy = configuration['pageViewLegacy'];
       const sessionReplayPlugin = configuration['sessionReplayPlugin'];
-      const sessionReplayPluginOptions = configuration['sessionReplayPluginOptions'];
 
       if (userAgentEnrichmentOptions) {
         client.add(amplitudeUserAgentEnrichmentPlugin.userAgentEnrichmentPlugin(userAgentEnrichmentOptions));
@@ -244,7 +243,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
       }
 
       if(sessionReplayPlugin) {
-        client.add(sessionReplay.plugin(sessionReplayPluginOptions));
+        client.add(sessionReplay.plugin());
       }
 
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
