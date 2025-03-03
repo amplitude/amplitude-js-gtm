@@ -1,6 +1,6 @@
 {
   "name": "@amplitude/amplitude-js-gtm",
-  "version": "3.11.4",
+  "version": "3.12.0",
   "description": "Amplitude JS SDK Wrapper for use with Google Tag Manager",
   "main": "dist/index.js",
   "scripts": {
