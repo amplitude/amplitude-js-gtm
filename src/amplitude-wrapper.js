@@ -253,8 +253,8 @@ const LOG_PREFIX = '[Amplitude / GTM]';
 
       if (guidesSurveys) {
         // Only initiate G/S here, otherwise, we'll auto-install the proxy for users who don't need it
-        engagementSnippet()
-        client.add(window.engagement.plugin())
+        engagementSnippet();
+        client.add(window.engagement.plugin());
       }
 
       // as plugin order cannot be adjusted, init first then add library plugin to overwrite the library value
