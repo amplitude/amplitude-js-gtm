@@ -156,10 +156,16 @@ const LOG_PREFIX = '[Amplitude / GTM]';
           .setPrice(args.price)
           .setRevenueType(args.revenueType || '')
           .setEventProperties(args.eventProperties || {})
-          .setRevenue(args.revenue || (args.price * (args.quantity || 1)))
-          .setCurrency(args.currency || '')
-          .setReceipt(args.receipt || '')
-          .setReceiptSig(args.receiptSig || '');
+          .setRevenue(args.revenue || (args.price * (args.quantity || 1)));
+          if (args.currency) {
+            revenue.setCurrency(args.currency);
+          }
+          if (args.receipt) {
+            revenue.setReceipt(args.receipt);
+          }
+          if (args.receiptSig) {
+            revenue.setReceiptSig(args.receiptSig);
+          }
       client.revenue(revenue);
   };
 
