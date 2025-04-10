@@ -11,7 +11,7 @@ const rl = readline.createInterface({
 
 let pluginUrl = '';
 
-rl.question('Enter the version of Analyics (e.g., 2.11.11): ', (version) => {
+rl.question('Enter the version of Analytics (e.g., 2.11.11): ', (version) => {
   pluginUrl = `https://cdn.amplitude.com/libs/analytics-browser-gtm-${version}-min.js.gz`;
   
   rl.close();
