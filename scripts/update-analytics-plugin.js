@@ -30,8 +30,11 @@ rl.question('Enter the version of Analytics (e.g., 1.4.0): ', (version) => {
       const endComment = '/* Amplitude Browser 2.0 SDK end */';
       const startIndex = amplitudeWrapperContent.indexOf(startComment);
       const endIndex = amplitudeWrapperContent.indexOf(endComment, startIndex);
-      if (startIndex === -1 || endIndex === -1) {
-        throw new Error('Could not find the comments to replace.');
+      if (startIndex === -1) {
+        throw new Error(`Could not find the start comment marker: "${startComment}".`);
+      }
+      if (endIndex === -1) {
+        throw new Error(`Could not find the end comment marker: "${endComment}".`);
       }
       const beforeContent = amplitudeWrapperContent.slice(0, startIndex + startComment.length);
       const afterContent = amplitudeWrapperContent.slice(endIndex);
