@@ -1,8 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const https = require('node:https');
-const zlib = require('node:zlib');
 const readline = require('readline');
+const { downloadAndDecompress } = require('./helpers');
 
 const filePath = path.resolve(__dirname, '../src/amplitude-wrapper.js');
 const pluginName = 'sessionReplayPlugin';
@@ -12,30 +11,6 @@ const rl = readline.createInterface({
 });
 
 let pluginUrl = '';
-
-function downloadAndDecompress(url) {
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, (response) => {
-        if (response.statusCode !== 200) {
-          return reject(new Error(`Failed to download file: ${response.statusCode}`));
-        }
-
-        const gunzip = zlib.createGunzip();
-        const chunks = [];
-
-        response.pipe(gunzip);
-
-        gunzip.on('data', (chunk) => {
-          chunks.push(chunk);
-        });
-
-        gunzip.on('end', () => resolve(Buffer.concat(chunks).toString()));
-        gunzip.on('error', (err) => reject(err));
-      })
-      .on('error', (err) => reject(err));
-  });
-}
 
 rl.question('Enter the version of the session replay plugin (e.g., 1.4.0): ', (version) => {
   pluginUrl = `https://cdn.amplitude.com/libs/plugin-session-replay-browser-${version}-min.js.gz`;
