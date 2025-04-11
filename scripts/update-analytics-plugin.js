@@ -1,7 +1,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const readline = require('readline');
-const { downloadAndDecompress } = require('./helpers');
+const util = require('node:util');
+const exec = util.promisify(require('node:child_process').exec);
 
 const filePath = path.resolve(__dirname, '../src/amplitude-wrapper.js');
 const rl = readline.createInterface({
@@ -9,23 +10,30 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-let pluginUrl = '';
-
 rl.question('Enter the version of Analytics (e.g., 2.11.11): ', (version) => {
-  pluginUrl = `https://cdn.amplitude.com/libs/analytics-browser-gtm-${version}-min.js.gz`;
-  
   rl.close();
 
   // The rest of the script remains unchanged
   (async () => {
     try {
-      let newAnalyticsContents = await downloadAndDecompress(pluginUrl);
+      // check out amplitude-typescript at the specified version. Install dependencies
+      // and build it
+      const packageVersion = `@amplitude/analytics-browser@${version}`;
+      await exec(`sh ./scripts/amplitude-typescript-fetch.sh`, { env: { TAG: packageVersion } });
+
+      // get the contents of 'amplitude-gtm-snippet.js' from the cloned repo
       console.log('Analytics code downloaded and decompressed successfully.');
-      let amplitudeWrapperContent = fs.readFileSync(filePath, 'utf8');
+      const gtmSnippetPath = path.resolve(
+        __dirname, '..', 'cloned_repos', 'amplitude_typescript',
+        'packages', 'analytics-browser', 'generated',
+        'amplitude-gtm-snippet.js',
+      );
+      const newAnalyticsContents = fs.readFileSync(gtmSnippetPath, 'utf8');
 
       // find content between the comments
       // /* Amplitude Browser 2.0 SDK begin */ and /* Amplitude Browser 2.0 SDK end */
       // and replace them with the newAnalyticsContents
+      let amplitudeWrapperContent = fs.readFileSync(filePath, 'utf8');
       const startComment = '/* Amplitude Browser 2.0 SDK begin */';
       const endComment = '/* Amplitude Browser 2.0 SDK end */';
       const startIndex = amplitudeWrapperContent.indexOf(startComment);
