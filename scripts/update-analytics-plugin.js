@@ -1,8 +1,8 @@
+const { spawn } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 const readline = require('readline');
-const util = require('node:util');
-const exec = util.promisify(require('node:child_process').exec);
+const exec = require('node:child_process').exec;
 
 const filePath = path.resolve(__dirname, '../src/amplitude-wrapper.js');
 const rl = readline.createInterface({
@@ -19,7 +19,25 @@ rl.question('Enter the version of Analytics (e.g., 2.11.11): ', (version) => {
       // check out amplitude-typescript at the specified version. Install dependencies
       // and build it
       const packageVersion = `@amplitude/analytics-browser@${version}`;
-      await exec(`sh ./scripts/amplitude-typescript-fetch.sh`, { env: { TAG: packageVersion } });
+      await new Promise((resolve, reject) => {
+        // call exec 'sh ./scripts/amplitude-typescript-fetch.sh' and wait to complete
+        const script = spawn('sh', ['./scripts/amplitude-typescript-fetch.sh'], {
+          env: { TAG: packageVersion, ...process.env },
+          stdio: 'inherit',
+        });
+        script.on('error', (error) => {
+          console.error(`Error executing script: ${error.message}`);
+          reject(error);
+        });
+        script.on('close', (code) => {
+          if (code !== 0) {
+            console.error(`Script exited with code ${code}`);
+            reject(new Error(`Script exited with code ${code}`));
+          } else {
+            resolve();
+          }
+        });
+      });
 
       // get the contents of 'amplitude-gtm-snippet.js' from the cloned repo
       console.log('Analytics code downloaded and decompressed successfully.');

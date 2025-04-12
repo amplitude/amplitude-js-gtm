@@ -1,5 +1,4 @@
 #!/bin/bash
-
 REPO_URL="https://github.com/amplitude/Amplitude-TypeScript"
 if [ -z "$TAG" ]; then
   echo "Error: TAG environment variable is not set."
