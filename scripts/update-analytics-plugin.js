@@ -25,8 +25,8 @@ rl.question('Enter the version of Analytics (e.g., 2.11.11): ', (version) => {
       console.log('Analytics code downloaded and decompressed successfully.');
       const gtmSnippetPath = path.resolve(
         __dirname, '..', 'cloned_repos', 'amplitude_typescript',
-        'packages', 'analytics-browser', 'generated',
-        'amplitude-gtm-snippet.js',
+        'packages', 'analytics-browser', 'lib', 'scripts', 
+        'amplitude-gtm-snippet-min.js',
       );
       const newAnalyticsContents = fs.readFileSync(gtmSnippetPath, 'utf8');
 
