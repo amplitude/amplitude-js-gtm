@@ -67,13 +67,13 @@ jobs:
           role-to-assume: arn:aws:iam::358203115967:role/github-actions-role
           aws-region: us-west-2
 
-      - name: Create new version
-        run: |
-          CURRENT_VERSION=$(npm info . version)
-          STAGED_VERSION=$(npx semver $CURRENT_VERSION -i ${{ env.RELEASE_VERSION }} --preid beta)
-          npm version $STAGED_VERSION
-          git push
-          git push origin v$STAGED_VERSION
+      # - name: Create new version
+      #   run: |
+      #     CURRENT_VERSION=$(npm info . version)
+      #     STAGED_VERSION=$(npx semver $CURRENT_VERSION -i ${{ env.RELEASE_VERSION }} --preid beta)
+      #     npm version $STAGED_VERSION
+      #     git push
+      #     git push origin v$STAGED_VERSION
 
       - name: Pubish package
         run: |
