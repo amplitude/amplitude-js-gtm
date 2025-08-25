@@ -47,6 +47,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
       - name: Install project dependencies
         run: |
           yarn install --frozen-lockfile
@@ -67,11 +72,15 @@ jobs:
           role-to-assume: arn:aws:iam::358203115967:role/github-actions-role
           aws-region: us-west-2
 
-      - name: Create new version
+      - name: Create new version and update history
         run: |
           CURRENT_VERSION=$(npm info . version)
           STAGED_VERSION=$(npx semver $CURRENT_VERSION -i ${{ env.RELEASE_VERSION }} --preid beta)
-          npm version $STAGED_VERSION
+          npm version $STAGED_VERSION -m "build: release %s"
+          pip install natsort
+          python scripts/update-version-history.py
+          git add VERSION_HISTORY.md
+          git commit --amend --no-edit
           git push
           git push origin v$STAGED_VERSION
 
