@@ -208,7 +208,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
     return expArray?.reduce((acc, item) => {
       var regExp = getRegExp(item);
       if (regExp !== null) {
-        acc.push(item);
+        acc.push(regExp);
       }
       return acc;
     }, []);
@@ -255,6 +255,21 @@ const LOG_PREFIX = '[Amplitude / GTM]';
         if (dataAttributePrefix.length !== 0) {
           configuration.autocapture.elementInteractions.dataAttributePrefix = dataAttributePrefix;
         }
+      }
+
+      if (configuration.autocapture.networkTracking) {
+        const networkTracking = configuration.autocapture.networkTracking;
+        const captureRules = networkTracking.captureRules || [];
+        captureRules.forEach((rule) => {
+          rule.urls = [
+            ...(rule.urls || []),
+            ...(getValidExp(rule.urlsRegex) || [])
+          ];
+          if (rule.urls.length === 0) {
+            delete rule.urls;
+          }
+          delete rule.urlsRegex;
+        });
       }
 
       const userAgentEnrichmentOptions = configuration['userAgentEnrichmentOptions'];
