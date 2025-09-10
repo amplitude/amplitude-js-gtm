@@ -265,7 +265,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
             ...(rule.urls || []),
             ...(getValidExp(rule.urlsRegex) || [])
           ];
-          if (rule.urls.length !== 0) {
+          if (rule.urls.length === 0) {
             delete rule.urls;
           }
           delete rule.urlsRegex;
