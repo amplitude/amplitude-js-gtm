@@ -259,7 +259,7 @@ const LOG_PREFIX = '[Amplitude / GTM]';
 
       if (configuration.autocapture.networkTracking) {
         const networkTracking = configuration.autocapture.networkTracking;
-        const captureRules = networkTracking.captureRules;
+        const captureRules = networkTracking.captureRules || [];
         captureRules.forEach((rule) => {
           rule.urls = [
             ...(rule.urls || []),
