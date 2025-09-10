@@ -99,7 +99,8 @@ typings/
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+# TODO: DO NOT MERGE
+# dist
 
 .DS_Store
 .idea
