@@ -42,10 +42,11 @@ jobs:
         with:
           ref: v3.x
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: 24.x # Ensure npm 11.5.1 or later is installed for OIDC, node 24.6 is minimal
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -60,11 +61,6 @@ jobs:
         run: |
           git config --global user.name amplitude-sdk-bot
           git config --global user.email amplitude-sdk-bot@users.noreply.github.com
-
-      - name: Configure NPM User
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" > ~/.npmrc
-          npm whoami
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
