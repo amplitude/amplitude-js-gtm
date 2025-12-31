@@ -1,3 +1,7 @@
+# DEPRECATED
+
+This repository has been deprecated in favor of bundling from the Amplitude Typescript monorepo under the "gtm-snippet" package: https://github.com/amplitude/Amplitude-TypeScript/tree/main/packages/gtm-snippet
+
 # Amplitude JavaScript SDK wrapper for Google Tag Manager
 The purpose of this wrapper is to provide a JavaScript interface for interacting with the `window.amplitude` client.
 
