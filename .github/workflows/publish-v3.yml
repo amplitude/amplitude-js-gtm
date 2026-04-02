@@ -38,12 +38,12 @@ jobs:
 
     steps:
       - name: Check out git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
         with:
           ref: v3.x
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3
         with:
           node-version: 24.x # Ensure npm 11.5.1 or later is installed for OIDC, node 24.6 is minimal
           registry-url: 'https://registry.npmjs.org'
@@ -58,7 +58,7 @@ jobs:
           git config --global user.email amplitude-sdk-bot@users.noreply.github.com
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@5fd3084fc36e372ff1fff382a39b10d03659f355 # v2
         with:
           role-to-assume: arn:aws:iam::358203115967:role/github-actions-role
           aws-region: us-west-2
